@@ -48,37 +48,49 @@ session_start();
                 ?>
 
                 <form method="POST" action="register_process.php">
-                    <div class="mb-3">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" name="name" class="form-control" placeholder="Enter full name" >
-                    </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" placeholder="Enter email" >
-                    </div>
+    <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="name" class="form-control" placeholder="Enter full name">
+    </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" placeholder="Enter password" >
-                    </div>
+    <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" placeholder="Choose a username">
+    </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Confirm Password</label>
-                        <input type="password" name="confirm_password" class="form-control" placeholder="Confirm password" >
-                    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" placeholder="Enter email">
+    </div>
 
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="terms" name="terms" >
-                        <label class="form-check-label" for="terms">I agree to the Terms</label>
-                    </div>
+    <div class="mb-3">
+        <label class="form-label">Phone Number</label>
+        <input type="text" name="phone" class="form-control" placeholder="Enter phone number">
+    </div>
 
-                    <button class="btn btn-primary w-100">Sign Up</button>
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Enter password">
+    </div>
 
-                    <p class="text-center mt-3">
-                        Already have an account? <a href="login.php">Login</a>
-                    </p>
-                </form>
+    <div class="mb-3">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" name="confirm_password" class="form-control" placeholder="Confirm password">
+    </div>
+
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="terms" name="terms">
+        <label class="form-check-label" for="terms">I agree to the Terms</label>
+    </div>
+
+    <button class="btn btn-primary w-100">Sign Up</button>
+
+    <p class="text-center mt-3">
+        Already have an account? <a href="login.php">Login</a>
+    </p>
+</form>
+
 
             </div>
         </div>

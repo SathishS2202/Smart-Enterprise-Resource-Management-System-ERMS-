@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+.wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    background: #2f3542;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 0;
+}
+
+.main {
+    flex: 1;
+    background: #f4f6f9;
+}
+
+.topbar {
+    background: white;
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card, .stat {
+    background: white;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.panels {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+}
+
+.panel {
+    background: white;
+    padding: 20px;
+    border-radius: 6px;
+}

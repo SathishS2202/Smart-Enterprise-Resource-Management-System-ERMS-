@@ -52,23 +52,23 @@ $_SESSION['user_name'] = $user['name'];
 $_SESSION['role']      = $user['role_name'];
 
 /* ROLE-BASED REDIRECT */
+
 switch ($user['role_name']) {
 
     case 'Admin':
         header("Location: ../admin/dashboard.php");
         break;
 
-    case 'Manager':
-        header("Location: ../manager/dashboard.php");
+    case 'Agent':
+        header("Location: ../agent/dashboard.php");
         break;
 
-    case 'Employee':
-        header("Location: ../employee/dashboard.php");
+    case 'Client':
+        header("Location: ../client/dashboard.php");
         break;
 
     default:
         $_SESSION['error'] = "Role not assigned.";
         header("Location: login.php");
 }
-
 exit();
