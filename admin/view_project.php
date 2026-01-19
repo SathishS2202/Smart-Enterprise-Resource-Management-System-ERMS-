@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
     header("Location: ../login.php");
     exit;
@@ -8,30 +7,38 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
 
 include '../includes/db.php';
 
-$id = intval($_GET['id'] ?? 0);
-
-$userRes = mysqli_query($conn, "
-    SELECT users.*, roles.role_name 
-    FROM users 
-    JOIN roles ON users.role_id = roles.id 
-    WHERE users.id = $id
-");
-
-if(mysqli_num_rows($userRes) == 0){
-    die("User not found.");
+// Get project ID from URL
+$project_id = intval($_GET['id'] ?? 0);
+if ($project_id <= 0) {
+    die("Invalid Project ID.");
 }
 
-$user = mysqli_fetch_assoc($userRes);
-?>
+// Fetch project details with assigned agent and creator
+$result = mysqli_query($conn, "
+    SELECT 
+        p.*,
+        creator.name AS created_by_name,
+        agent.name AS agent_name
+    FROM projects p
+    LEFT JOIN users creator ON p.created_by = creator.id
+    LEFT JOIN users agent ON p.agent_id = agent.id
+    WHERE p.id = $project_id
+    LIMIT 1
+");
 
+if(mysqli_num_rows($result) == 0){
+    die("Project not found.");
+}
+
+$project = mysqli_fetch_assoc($result);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>View User</title>
+<title>View Project</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body{margin:0;font-family:Segoe UI;background:#f3f4f6}
 
@@ -87,6 +94,8 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6}
 .card h3{margin-top:0}
 .label{font-weight:600;color:#374151;margin-right:8px}
 .value{color:#111827}
+.ok{color:#065f46;background:#d1fae5;padding:4px 10px;border-radius:20px;font-size:12px;border:1px solid #6ee7b7}
+.off{color:#7f1d1d;background:#fee2e2;padding:4px 10px;border-radius:20px;font-size:12px;border:1px solid #fca5a5}
 .back-btn{display:inline-flex;align-items:center;gap:6px;background:#2563eb;color:#fff;padding:8px 12px;border-radius:6px;text-decoration:none}
 .back-btn:hover{background:#1e40af}
 </style>
@@ -109,23 +118,27 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6}
 
 <!-- TOP BAR -->
 <div class="topbar">
-    <div class="page-title">View User</div>
+    <div class="page-title">View Project</div>
     <div><i class="bi bi-person"></i> <?= $_SESSION['user_name'] ?></div>
 </div>
 
 <br>
 
 <div class="card">
-    <h3><?= htmlspecialchars($user['name']) ?></h3>
-    <p><span class="label">Email:</span> <span class="value"><?= htmlspecialchars($user['email']) ?></span></p>
-    <p><span class="label">Role:</span> <span class="value"><?= htmlspecialchars($user['role_name']) ?></span></p>
-    <p><span class="label">Status:</span> <span class="value"><?= $user['status'] ? 'Active' : 'Inactive' ?></span></p>
-    <p><span class="label">Phone:</span> <span class="value"><?= htmlspecialchars($user['phone'] ?? '-') ?></span></p>
-    <p><span class="label">Username:</span> <span class="value"><?= htmlspecialchars($user['username'] ?? '-') ?></span></p>
-    <p><span class="label">Created At:</span> <span class="value"><?= $user['created_at'] ?></span></p>
+    <h3><?= htmlspecialchars($project['project_name']) ?></h3>
+    <p><span class="label">Assigned Agent:</span> <span class="value"><?= $project['agent_name'] ?? 'Not Assigned' ?></span></p>
+    <p><span class="label">Created By:</span> <span class="value"><?= $project['created_by_name'] ?? 'Unknown' ?></span></p>
+    <p><span class="label">Start Date:</span> <span class="value"><?= $project['start_date'] ?? '-' ?></span></p>
+    <p><span class="label">End Date:</span> <span class="value"><?= $project['end_date'] ?? '-' ?></span></p>
+    <p><span class="label">Status:</span> 
+        <span class="<?= $project['status']=='Active'?'ok':'off' ?>"><?= $project['status'] ?></span>
+    </p>
+    <p><span class="label">Created At:</span> <span class="value"><?= $project['created_at'] ?></span></p>
+    <p><span class="label">Description:</span></p>
+    <p><?= nl2br(htmlspecialchars($project['description'] ?? 'No description')) ?></p>
 </div>
 
-<a href="users.php" class="back-btn"><i class="fa fa-arrow-left"></i> Back to Users</a>
+<a href="projects.php" class="back-btn"><i class="fa fa-arrow-left"></i> Back to Projects</a>
 
 </div>
 </body>

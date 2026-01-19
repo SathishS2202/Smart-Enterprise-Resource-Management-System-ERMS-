@@ -36,204 +36,207 @@ $pendingTasks = mysqli_fetch_assoc(
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
     <style>
-        body{margin:0;font-family:Segoe UI;background:#f3f4f6}
-
-        /* ===== SIDEBAR ===== */
-        .sidebar {
-            position: fixed;
-            width: 70px;
-            height: 100vh;
-            background: #111827;
-            padding-top: 20px;
-            transition: 0.3s;
-            overflow: hidden;
-        }
-
-        .sidebar:hover {
-            width: 220px;
-        }
-
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            color: #cbd5e1;
-            text-decoration: none;
-            padding: 15px;
-            gap: 15px;
-            white-space: nowrap;
-        }
-
-        .sidebar a i {
-            font-size: 20px;
-            min-width: 30px;
-            text-align: center;
-        }
-
-        .sidebar a span {
-            opacity: 0;
-            transition: 0.2s;
-        }
-
-        .sidebar:hover a span {
-            opacity: 1;
-        }
-
-        .sidebar a:hover {
-            background: #2563eb;
-            color: #fff;
-        }
-
-        /* ===== MAIN ===== */
-        .main {
-            margin-left: 70px;
-            transition: 0.3s;
-        }
-        .main-content {
-    padding: 30px;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    margin: 20px; /* spacing from main edges */
+/* ===== GENERAL ===== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
 }
 
-
-        .sidebar:hover ~ .main {
-            margin-left: 220px;
-        }
-        .top-icon {
-    margin-bottom: 40px;
+/* ===== SIDEBAR ===== */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 70px;
+    background: #111827;
+    transition: width 0.3s;
+    overflow: hidden;
+    z-index: 1000;
+}
+.sidebar:hover {
+    width: 220px;
+}
+.sidebar a {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 15px;
+    gap: 15px;
+    white-space: nowrap;
+    transition: 0.2s;
+    border-radius: 8px;
+    margin: 5px 8px;
+}
+.sidebar a i {
+    font-size: 20px;
+    min-width: 30px;
+    text-align: center;
+}
+.sidebar a span {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.sidebar:hover a span { opacity: 1; }
+.sidebar a:hover { background: #2563eb; color: #fff; }
+
+/* ===== MAIN AREA ===== */
+.main {
+    margin-left: 70px;
+    transition: margin-left 0.3s;
+}
+.sidebar:hover ~ .main {
+    margin-left: 220px;
+}
+.main-content {
+    padding: 30px;
 }
 
-        /* ===== HEADER ===== */.header {
-    background: #fff;
-    padding: 15px 25px;
+/* ===== HEADER ===== */
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    background: #fff;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
 }
-
-/* Left side: switch + title */
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+.header-left h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
 }
-
-.switch-agent {
+.header-left .role-switch {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: #151515; /* green */
-    color: #fff;
-    padding: 8px 12px;
+    background: #151515;
+    padding: 6px 12px;
     border-radius: 8px;
+    color: #fff;
     font-weight: 600;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.2s;
 }
-
-.switch-agent i {
-    font-size: 18px;
+.header-left .role-switch select {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
 }
+.header-left .role-switch select option { color: #000; }
 
-.switch-agent:hover {
-    background: #059669;
-    transform: translateY(-2px);
-}
-
-/* Right side: notifications & username */
 .header-right {
     display: flex;
     align-items: center;
-    gap: 10px;
-}
-
-
-        /* ===== DASHBOARD CARDS ===== */
-        .cards {
-            padding: 25px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        .card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card h2 {
-            margin: 0;
-            font-size: 28px;
-        }
-
-        .card p {
-            margin: 0;
-            color: #6b7280;
-        }
-
-        .card i {
-            font-size: 35px;
-            color: #2563eb;
-        }
-
-        /* ===== TABLE ===== */
-        .table-box {
-            margin: 0 25px 25px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .dashboard-icons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns */
-    gap: 30px;
-    padding: 30px;
-}
-
-.icon-box {
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    text-align: center;
-    padding: 30px 0;
-    color: #111827;
-    text-decoration: none;
-    transition: transform 0.2s, background 0.2s;
-}
-
-.icon-box i {
-    font-size: 40px;
-    color: #455353;
-    margin-bottom: 10px;
-}
-
-.icon-box span {
-    display: block;
+    gap: 15px;
     font-weight: 600;
 }
+.header-right i {
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.header-right i:hover { transform: scale(1.2); }
 
+/* ===== DASHBOARD ICON BOXES ===== */
+/* ===== DASHBOARD ICON BOXES - 2 ROWS ===== */
+.dashboard-icons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 icons per row */
+    grid-template-rows: repeat(2, 1fr);    /* 2 rows */
+    gap: 25px;
+    padding: 0;
+}
+.icon-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px 0;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    text-decoration: none;
+    color: #111827;
+}
+.icon-box i {
+    font-size: 40px;
+    margin-bottom: 12px;
+    color: #2563eb;
+    transition: 0.3s;
+}
+.icon-box span {
+    font-weight: 600;
+    display: block;
+}
 .icon-box:hover {
-    background: #bee0f6;
+    background: #2563eb;
     color: #fff;
     transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+.icon-box:hover i { color: #fff; }
+
+
+/* ===== CARDS ===== */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+.card h2 {
+    margin: 0;
+    font-size: 28px;
+}
+.card p {
+    margin: 0;
+    color: #6b7280;
+}
+.card i {
+    font-size: 36px;
+    color: #2563eb;
 }
 
-.icon-box:hover i {
-    color: #fff;
+/* ===== TABLE BOX ===== */
+.table-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
-    </style>
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width: 992px) {
+    .header-left h3 { font-size: 20px; }
+    .dashboard-icons { grid-template-columns: repeat(auto-fit, minmax(140px, 3fr)); }
+    .cards { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+}
+@media screen and (max-width: 576px) {
+    .main { margin-left: 0; padding: 15px; }
+    .sidebar { width: 60px; }
+    .sidebar:hover { width: 180px; }
+}
+</style>
+
 </head>
 <body>
 
@@ -255,8 +258,18 @@ $pendingTasks = mysqli_fetch_assoc(
 
    <div class="header">
         <div class="header-left">
-            <h3>Admin Dashboard</h3>
-        </div>
+    <h3>Admin Dashboard</h3>
+
+    <div class="role-switch">
+        <i class="bi bi-person-lines-fill"></i>
+        <select onchange="location.href=this.value">
+            <option selected disabled>Switch Role</option>
+            <option value="switch_role.php?role=agent">Agent View</option>
+            <option value="switch_role.php?role=client">Client View</option>
+        </select>
+    </div>
+</div>
+>
         <div class="header-right">
             <a href="switch_agent.php" class="switch-agent">
                 <i class="bi bi-arrow-repeat"></i>
