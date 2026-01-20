@@ -1,19 +1,20 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
-/* User must be logged in */
-if (!isset($_SESSION['user_id'])) {
+// Check if user is logged in
+if(!isset($_SESSION['user_id']) || !isset($_SESSION['role'])){
     header("Location: ../auth/login.php");
-    exit();
+    exit;
 }
 
-/* Role checker function */
-function requireRole($role)
-{
-    if (!isset($_SESSION['role']) || $_SESSION['role'] !== $role) {
+// Function to check if user has correct role for this panel
+function checkRole($requiredRole){
+    if(!isset($_SESSION['role']) || $_SESSION['role'] !== $requiredRole){
+        // Destroy session if wrong role
+        session_unset();
+        session_destroy();
         header("Location: ../auth/login.php");
-        exit();
+        exit;
     }
 }
+?>

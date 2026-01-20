@@ -1,7 +1,13 @@
 <?php
+include '../includes/auth_check.php';
+checkRole('Admin');  // Only allow Admin
+?>
+
+
+<?php
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: ../login.php");
+     header("Location: ../auth/login.php");
     exit;
 }
 

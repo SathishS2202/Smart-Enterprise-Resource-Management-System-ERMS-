@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!isset($_SESSION['user_id']) || $_SESSION['role']!=='Agent'){
-    header("Location: ../login.php"); exit;
+    header("Location: ../auth/login.php"); exit;
 }
 
 include '../includes/db.php';
@@ -44,37 +44,31 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid #cbd5e1;background:#f9fafb;padding:6px 10px;border-radius:4px;cursor:pointer;color:#111827;text-decoration:none}
 .icon-btn:hover{background:#e5e7eb}
 .search-box{padding:6px 10px;border-radius:4px;border:1px solid #ccc;width:200px;margin-right:10px;margin-bottom:10px}
+.badge{padding:4px 8px;border-radius:5px;font-weight:600;}
+.bg-primary{background:#2563eb;color:#fff}
+.bg-success{background:#16a34a;color:#fff}
+.bg-warning{background:#fbbf24;color:#fff}
 </style>
 </head>
 <body>
 
 <div class="sidebar">
     <a href="dashboard.php"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-    <a href="projects.php"><i class="bi bi-folder"></i><span>My Projects</span></a>
-    <a href="tasks.php"><i class="bi bi-list-task"></i><span>My Tasks</span></a>
+    <a href="projects.php"><i class="bi bi-folder"></i><span>Projects</span></a>
+    <a href="tasks.php"><i class="bi bi-list-task"></i><span>Tasks</span></a>
     <a href="attendance.php"><i class="bi bi-calendar-check"></i><span>Attendance</span></a>
     <a href="documents.php"><i class="bi bi-file-earmark-text"></i><span>Documents</span></a>
-    <a href="../logout.php"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+    <a href="reports.php"><i class="bi bi-bar-chart"></i><span>Reports</span></a>
+    <a href="profile.php"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+    <a href="logout.php"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 </div>
-
 <div class="main">
 <div class="topbar">
     <div class="page-title">My Projects</div>
     <div><i class="bi bi-person"></i> <?= $_SESSION['user_name'] ?></div>
 </div>
 
-<?php if(isset($_SESSION['msg'])): ?>
-<div class="alert alert-success"><?= $_SESSION['msg'] ?></div>
-<?php unset($_SESSION['msg']); endif; ?>
-
 <div class="card table-container">
-
-    <!-- Search Inputs -->
-    <div class="mb-2 d-flex flex-wrap">
-        <input type="text" class="search-box" placeholder="Search Project Name">
-        <input type="text" class="search-box" placeholder="Search Status">
-    </div>
-
     <table class="table table-bordered table-hover align-middle" id="projects-table">
         <thead class="table-light">
         <tr>
@@ -112,7 +106,7 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6}
                 <td>
                     <a href="view_project.php?id=<?= $p['id'] ?>" class="icon-btn"><i class="fa fa-eye"></i></a>
                     <a href="tasks.php?project_id=<?= $p['id'] ?>" class="icon-btn"><i class="fa fa-tasks"></i></a>
-                    <?php if($p['status'] != 'Completed'): ?>
+                    <?php if($p['status']=='Active'): ?>
                         <a href="../includes/update_project_status.php?id=<?= $p['id'] ?>&status=Completed" class="btn btn-success btn-sm">Mark Completed</a>
                     <?php endif; ?>
                 </td>
@@ -124,21 +118,6 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6}
     </table>
 </div>
 </div>
-
-<!-- Search Script -->
-<script>
-const searchBoxes = document.querySelectorAll('.search-box');
-searchBoxes.forEach((box, index) => {
-    box.addEventListener('keyup', () => {
-        const filter = box.value.toLowerCase();
-        const rows = document.querySelectorAll('#projects-table tbody tr');
-        rows.forEach(row => {
-            const cell = row.cells[index+1].innerText.toLowerCase(); // +1 because first column is #
-            row.style.display = cell.includes(filter) ? '' : 'none';
-        });
-    });
-});
-</script>
 
 </body>
 </html>

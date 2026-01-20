@@ -19,10 +19,10 @@ if (empty($email) || empty($password)) {
 
 /* Fetch user with role */
 $query = "
-    SELECT users.id, users.name, users.password, roles.role_name
-    FROM users
-    JOIN roles ON users.role_id = roles.id
-    WHERE users.email = ?
+    SELECT u.id, u.name, u.password, u.role_id, r.role_name, u.status
+    FROM users u
+    LEFT JOIN roles r ON u.role_id = r.id
+    WHERE u.email = ?
     LIMIT 1
 ";
 
@@ -46,29 +46,41 @@ if (!password_verify($password, $user['password'])) {
     exit();
 }
 
+/* Check role and status */
+if (empty($user['role_id']) || empty($user['role_name'])) {
+    $_SESSION['error'] = "Role not assigned. Contact Admin.";
+    header("Location: login.php");
+    exit();
+}
+
+if ($user['status'] != 1) {
+    $_SESSION['error'] = "Account inactive. Contact Admin.";
+    header("Location: login.php");
+    exit();
+}
+
 /* LOGIN SUCCESS */
 $_SESSION['user_id']   = $user['id'];
-$_SESSION['user_name'] = $user['name'];
+$_SESSION['username']  = $user['name'];   // use 'username' key consistently
 $_SESSION['role']      = $user['role_name'];
 
 /* ROLE-BASED REDIRECT */
-
-switch ($user['role_name']) {
-
-    case 'Admin':
+switch (strtolower($user['role_name'])) {
+    case 'admin':
         header("Location: ../admin/dashboard.php");
         break;
 
-    case 'Agent':
+    case 'agent':
         header("Location: ../agent/dashboard.php");
         break;
 
-    case 'Client':
+    case 'client':
         header("Location: ../client/dashboard.php");
         break;
 
     default:
-        $_SESSION['error'] = "Role not assigned.";
+        $_SESSION['error'] = "Role not assigned. Contact Admin.";
         header("Location: login.php");
+        break;
 }
 exit();

@@ -2,7 +2,7 @@
 session_start();
 
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Agent'){
-    header("Location: ../login.php");
+    header("Location: ../auth/login.php");
     exit;
 }
 
@@ -84,13 +84,15 @@ tr:hover{background:#f1f5f9}
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
     <a href="dashboard.php"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
     <a href="projects.php"><i class="bi bi-folder"></i><span>Projects</span></a>
     <a href="tasks.php"><i class="bi bi-list-task"></i><span>Tasks</span></a>
     <a href="attendance.php"><i class="bi bi-calendar-check"></i><span>Attendance</span></a>
-    <a href="../logout.php"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+    <a href="documents.php"><i class="bi bi-file-earmark-text"></i><span>Documents</span></a>
+    <a href="reports.php"><i class="bi bi-bar-chart"></i><span>Reports</span></a>
+    <a href="profile.php"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+    <a href="logout.php"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 </div>
 
 <div class="main">
