@@ -1,12 +1,9 @@
 
 
 <?php
-session_start();
+require_once '../includes/middleware.php';
+allowOnly('Admin');
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-     header("Location: ../auth/login.php");
-    exit;
-}
 
 include '../includes/db.php';
 
@@ -120,7 +117,7 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6}
 <!-- TOP BAR -->
 <div class="topbar">
     <div class="page-title">View User</div>
-    <div><i class="bi bi-person"></i> <?= $_SESSION['user_name'] ?></div>
+    <div><i class="bi bi-person"></i> <?= $_SESSION['username'] ?></div>
 </div>
 
 <br>

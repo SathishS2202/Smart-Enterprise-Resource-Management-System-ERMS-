@@ -120,12 +120,12 @@ $recentTasks = mysqli_query($conn,"
 <body>
 
 <div class="sidebar">
-    <a href="client_dashboard.php"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+    <a href="dashboard.php"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
     <a href="projects.php"><i class="bi bi-folder"></i><span>Projects</span></a>
     <a href="tasks.php"><i class="bi bi-list-task"></i><span>Tasks</span></a>
     <a href="documents.php"><i class="bi bi-file-earmark-text"></i><span>Documents</span></a>
     <a href="profile.php"><i class="bi bi-person-circle"></i><span>My Profile</span></a>
-    <a href="../logout.php"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+    <a href="logout.php"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 </div>
 
 <div class="main">
@@ -149,8 +149,8 @@ $recentTasks = mysqli_query($conn,"
             <a href="documents.php" class="icon-box"><i class="bi bi-file-earmark-text"></i><span>Documents</span></a>
             <a href="profile.php" class="icon-box"><i class="bi bi-person-circle"></i><span>My Profile</span></a>
         </div>
-
-        <!-- Recent Projects -->
+        <div class="row g-3">
+    <div class="col-md-6">
         <div class="table-box">
             <h5>Recent Projects</h5>
             <table class="table table-bordered table-hover">
@@ -158,15 +158,8 @@ $recentTasks = mysqli_query($conn,"
                     <tr><th>Project</th><th>Status</th><th>Start Date</th><th>End Date</th></tr>
                 </thead>
                 <tbody>
-                <?php
-               $recentProjects = mysqli_query($conn,"
-    SELECT * FROM projects
-    WHERE created_by = $client_id
-    ORDER BY id DESC
-    LIMIT 5
-");
-
-                while($p = mysqli_fetch_assoc($recentProjects)){
+<?php
+while($p = mysqli_fetch_assoc($recentProjects)){
                     $color = $p['status']=='Completed'?'#16a34a':($p['status']=='In Progress'?'#2563eb':'#f59e0b');
                     echo "<tr>
                             <td>".htmlspecialchars($p['project_name'])."</td>
@@ -179,11 +172,11 @@ $recentTasks = mysqli_query($conn,"
                 </tbody>
             </table>
         </div>
-
-        <!-- Recent Tasks -->
+    </div>
+    <div class="col-md-6">
         <div class="table-box">
             <h5>Recent Tasks</h5>
-            <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover">
                 <thead>
                     <tr><th>Task</th><th>Project</th><th>Status</th><th>Due Date</th></tr>
                 </thead>
@@ -201,17 +194,23 @@ $recentTasks = mysqli_query($conn,"
                 while($t = mysqli_fetch_assoc($recentTasks)){
                     $color = $t['status']=='Done'?'#16a34a':($t['status']=='In Progress'?'#2563eb':'#f59e0b');
                     echo "<tr>
-                            <td>".htmlspecialchars($t['task_name'])."</td>
+                            <td>".htmlspecialchars($t['title'])."</td>
+                            <td>".$t['deadline']."</td>
                             <td>".htmlspecialchars($t['project_name'])."</td>
                             <td style='color:$color;font-weight:600'>".$t['status']."</td>
-                            <td>".$t['due_date']."</td>
+                           
                           </tr>";
                 }
                 ?>
                 </tbody>
             </table>
+            </table>
+        </div>
+    </div>
+</div>
         </div>
 
+    </div>
     </div>
 </div>
 

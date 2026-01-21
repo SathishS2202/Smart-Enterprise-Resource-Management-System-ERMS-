@@ -1,15 +1,7 @@
-<?php
-include '../includes/auth_check.php';
-checkRole('Admin');  // Only allow Admin
-?>
-<?php
-session_start();
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-     header("Location: ../auth/login.php");
-    exit;
-}
-
+<?php
+require_once '../includes/middleware.php';
+allowOnly('Admin');
 include '../includes/db.php';
 
 $date = $_GET['date'] ?? date('Y-m-d');
@@ -159,9 +151,11 @@ tr:hover{background:#f1f5f9}
     <div class="page-title">Attendance</div>
     <div>
         <i class="bi bi-person"></i>
-        <?= $_SESSION['user_name'] ?? 'Admin' ?>
+        <?= $_SESSION['username'] ?? 'Admin' ?>
     </div>
 </div>
+<br>
+<br>
 
 <!-- BOX -->
 <div class="box">

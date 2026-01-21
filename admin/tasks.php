@@ -1,16 +1,7 @@
 <?php
-include '../includes/auth_check.php';
-checkRole('Admin');  // Only allow Admin
-?>
+require_once '../includes/middleware.php';
+allowOnly('Admin');
 
-
-<?php
-session_start();
-
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-     header("Location: ../auth/login.php");
-    exit;
-}
 
 include '../includes/db.php';
 
@@ -81,13 +72,14 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6}
 
 /* TOP BAR */
 .topbar{
-    background:#fff;padding:8px 8px;
+    background:#fff;
     display:flex;justify-content:space-between;
     align-items:center;border-bottom:1px solid #ddd
 }
 
 /* BOX */
 .box{
+    margin-top: 20px;
     background:#fff;border-radius:6px;
     box-shadow:0 2px 6px rgba(0,0,0,.05)
 }
@@ -170,7 +162,8 @@ tr:hover{background:#f1f5f9}
 
 <div class="topbar">
     <h2>Tasks</h2>
-    <div><?= $_SESSION['user_name'] ?></div>
+   <div><?= $_SESSION['username'] ?></div>
+
 </div>
 
 <br>

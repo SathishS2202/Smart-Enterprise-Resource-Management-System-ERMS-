@@ -1,12 +1,8 @@
+
 <?php
-include '../includes/auth_check.php';
-checkRole('Admin');  // Only allow Admin
-?>
-<?php
-session_start();
-if(!isset($_SESSION['user_id']) || $_SESSION['role']!=='Admin'){
-    header("Location: ../auth/login.php"); exit;
-}
+require_once '../includes/middleware.php';
+allowOnly('Admin');
+
 include '../includes/db.php';
 
 // Handle approval/rejection
@@ -93,7 +89,7 @@ body{margin:0;font-family:'Segoe UI',sans-serif;background:#f4f6f9}
 <div class="main">
 <div class="topbar">
     <div class="page-title"><i class="bi bi-calendar-check me-2"></i>Leave Approvals</div>
-    <div><i class="bi bi-person"></i> <?= $_SESSION['user_name'] ?></div>
+    <div><i class="bi bi-person"></i> <?= $_SESSION['username'] ?></div>
 </div>
 
 <div class="container-fluid">

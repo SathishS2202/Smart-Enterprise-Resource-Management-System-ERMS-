@@ -1,15 +1,7 @@
 <?php
-include '../includes/auth_check.php';
-checkRole('Admin');  // Only allow Admin
-?>
+require_once '../includes/middleware.php';
+allowOnly('Admin');
 
-
-<?php
-session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: ../auth/login.php");
-    exit;
-}
 
 include('../includes/db.php');
 
@@ -124,7 +116,7 @@ if (isset($_POST['update_profile'])) {
 <div class="main">
     <div class="header">
         <div class="header-left"><h3>My Profile</h3></div>
-        <div class="header-right"><?= $_SESSION['username'] ?? 'Admin'; ?></div>
+        <div class="header-right"><?= $_SESSION['username'] ?></div>
 
     </div>
 

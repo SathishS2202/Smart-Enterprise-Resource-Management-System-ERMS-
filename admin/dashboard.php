@@ -1,18 +1,10 @@
 <?php
-include '../includes/auth_check.php';
-checkRole('Admin');  // Only allow Admin
+require_once '../includes/middleware.php';
+allowOnly('Admin');
+
+include '../includes/db.php';
 ?>
-
-
 <?php
-session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: ../auth/login.php");
-    exit;
-}
-
-include('../includes/db.php');
-
 // Dashboard counts
 $totalUsers = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM users"))['total'];
 $totalAgents = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM users WHERE role_id = 2"))['total'];
@@ -102,12 +94,11 @@ $pendingLeaves = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS tota
                 <select onchange="location.href=this.value">
                     <option selected disabled>Switch Role</option>
                     <option value="switch_role.php?role=agent">Agent View</option>
-                    <option value="switch_role.php?role=client">Client View</option>
                 </select>
             </div>
         </div>
         <div class="header-right">
-            <a href="switch_agent.php"><i class="bi bi-arrow-repeat"></i></a>
+            <!-- <a href="switch_role.php?role=agent"><i class="bi bi-arrow-repeat"></i></a> -->
             <i class="bi bi-bell"></i>
             <?= $_SESSION['username'] ?? 'Admin'; ?>
         </div>
@@ -135,7 +126,7 @@ $pendingLeaves = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS tota
             <a href="documents.php" class="icon-box"><i class="bi bi-file-earmark-text"></i><span>Documents</span></a>
             <a href="leave_approvals.php" class="icon-box"><i class="bi bi-file-earmark-text"></i><span>Leave Approvals</span></a>
             <a href="reports.php" class="icon-box"><i class="bi bi-bar-chart"></i><span>Reports</span></a>
-            <a href="#" class="icon-box"><i class="bi bi-bell"></i><span>Notifications</span></a>
+            <a href="notifications.php" class="icon-box"><i class="bi bi-bell"></i><span>Notifications</span></a>
         </div>
 
         <!-- Top Cards -->

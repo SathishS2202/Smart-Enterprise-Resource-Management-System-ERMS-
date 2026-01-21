@@ -23,9 +23,29 @@ if (isset($_POST['add_project'])) {
         $error = "Project name is required.";
     } else {
         mysqli_query($conn, "
-            INSERT INTO projects (project_name, description, created_by, status, start_date, end_date)
-            VALUES ('$name', '$desc', $client_id, 'Pending', ".($start ? "'$start'" : "NULL").", ".($end ? "'$end'" : "NULL").")
-        ");
+    INSERT INTO projects 
+    (project_name, description, client_id, status, start_date, end_date)
+    VALUES (
+        '$name',
+        '$desc',
+        $client_id,
+        'Pending',
+        ".($start ? "'$start'" : "NULL").",
+        ".($end ? "'$end'" : "NULL")."
+    )
+");
+/* ===== ADD NOTIFICATION FOR ADMIN ===== */
+mysqli_query($conn, "
+    INSERT INTO notifications (user_id, title, message, type)
+    VALUES (
+        1,
+        'New Project Created',
+        'Client requested a new project: $name',
+        'project'
+    )
+");
+
+
         if(mysqli_affected_rows($conn)>0){
             $success = "Project request sent to Admin!";
         } else {
@@ -82,7 +102,7 @@ body{margin:0;font-family:Segoe UI,sans-serif;background:#f3f4f6;}
     <a href="tasks.php"><i class="bi bi-list-task"></i><span>Tasks</span></a>
     <a href="documents.php"><i class="bi bi-file-earmark-text"></i><span>Documents</span></a>
     <a href="profile.php"><i class="bi bi-person-circle"></i><span>My Profile</span></a>
-    <a href="../logout.php"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+    <a href="logout.php"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 </div>
 
 <div class="main">

@@ -1,15 +1,7 @@
 <?php
-include '../includes/auth_check.php';
-checkRole('Admin');  // Only allow Admin
-?>
+require_once '../includes/middleware.php';
+allowOnly('Admin');
 
-
-<?php
-session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: ../auth/login.php");
-    exit;
-}
 
 include '../includes/db.php';
 

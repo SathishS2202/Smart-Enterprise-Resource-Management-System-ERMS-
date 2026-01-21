@@ -2,85 +2,112 @@
 session_start();
 include '../includes/db.php';
 
+/* Allow only POST */
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: login.php");
-    exit();
+    exit;
 }
 
-$email = trim($_POST['email']);
+/* Get inputs */
+$email    = trim($_POST['email']);
 $password = $_POST['password'];
 
-/* Validation */
-if (empty($email) || empty($password)) {
+/* Basic validation */
+if ($email === '' || $password === '') {
     $_SESSION['error'] = "All fields are required.";
     header("Location: login.php");
-    exit();
+    exit;
 }
 
-/* Fetch user with role */
-$query = "
-    SELECT u.id, u.name, u.password, u.role_id, r.role_name, u.status
+/*
+    Fetch user + role
+    Assumption:
+    - One primary role per user
+    - Can be extended to multiple roles later
+*/
+$sql = "
+    SELECT 
+        u.id,
+        u.name,
+        u.email,
+        u.password,
+        u.status,
+        r.role_name
     FROM users u
-    LEFT JOIN roles r ON u.role_id = r.id
+    INNER JOIN roles r ON u.role_id = r.id
     WHERE u.email = ?
     LIMIT 1
 ";
 
-$stmt = mysqli_prepare($conn, $query);
+$stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, "s", $email);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-if (mysqli_num_rows($result) !== 1) {
+/* User exists? */
+if (!$result || mysqli_num_rows($result) !== 1) {
     $_SESSION['error'] = "Invalid email or password.";
     header("Location: login.php");
-    exit();
+    exit;
 }
 
 $user = mysqli_fetch_assoc($result);
 
-/* Verify password */
+/* Password check */
 if (!password_verify($password, $user['password'])) {
     $_SESSION['error'] = "Invalid email or password.";
     header("Location: login.php");
-    exit();
+    exit;
 }
 
-/* Check role and status */
-if (empty($user['role_id']) || empty($user['role_name'])) {
-    $_SESSION['error'] = "Role not assigned. Contact Admin.";
-    header("Location: login.php");
-    exit();
-}
-
-if ($user['status'] != 1) {
+/* Status check */
+if ((int)$user['status'] !== 1) {
     $_SESSION['error'] = "Account inactive. Contact Admin.";
     header("Location: login.php");
-    exit();
+    exit;
 }
 
-/* LOGIN SUCCESS */
-$_SESSION['user_id']   = $user['id'];
-$_SESSION['username']  = $user['name'];   // use 'username' key consistently
-$_SESSION['role']      = $user['role_name'];
+/* ROLE CHECK */
+if (empty($user['role_name'])) {
+    $_SESSION['error'] = "Role not assigned. Contact Admin.";
+    header("Location: login.php");
+    exit;
+}
 
-/* ROLE-BASED REDIRECT */
-switch (strtolower($user['role_name'])) {
-    case 'admin':
+/* =================================
+   LOGIN SUCCESS — SESSION STRUCTURE
+   ================================= */
+
+$_SESSION['user_id']     = $user['id'];
+
+$_SESSION['role']        = $user['role_name'];  // original role
+$_SESSION['active_role'] = $user['role_name'];  // start with same panel
+$_SESSION['user_name'] = $user['name'];
+
+
+
+/* =================================
+   ROLE-BASED REDIRECT
+   ================================= */
+
+switch ($_SESSION['active_role']) {
+    case 'Admin':
         header("Location: ../admin/dashboard.php");
         break;
 
-    case 'agent':
+    case 'Agent':
         header("Location: ../agent/dashboard.php");
         break;
 
-    case 'client':
+    case 'Client':
         header("Location: ../client/dashboard.php");
         break;
 
     default:
-        $_SESSION['error'] = "Role not assigned. Contact Admin.";
+        session_destroy();
+        $_SESSION['error'] = "Invalid role.";
         header("Location: login.php");
         break;
 }
-exit();
+
+exit;

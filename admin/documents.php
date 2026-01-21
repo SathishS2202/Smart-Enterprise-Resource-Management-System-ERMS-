@@ -1,10 +1,9 @@
 <?php
-session_start();
+require_once '../includes/middleware.php';
+allowOnly('Admin'); // or 'Admin' if it's admin panel
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: ../auth/login.php");
-    exit;
-}
+
+
 
 include '../includes/db.php';
 
@@ -126,7 +125,7 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6}
 <div class="main">
     <div class="topbar mb-4">
         <div class="page-title">Documents</div>
-        <div><i class="bi bi-person"></i> <?= $_SESSION['user_name'] ?></div>
+        <div><i class="bi bi-person"></i> <?= $_SESSION['username'] ?></div>
     </div>
 
     <!-- UPLOAD FORM -->

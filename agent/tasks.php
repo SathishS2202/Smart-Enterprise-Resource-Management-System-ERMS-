@@ -1,10 +1,7 @@
 <?php
-session_start();
+require_once '../includes/middleware.php';
+allowOnly('Agent');
 
-if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Agent'){
-    header("Location: ../auth/login.php");
-    exit;
-}
 
 include '../includes/db.php';
 
@@ -27,6 +24,17 @@ $tasks = mysqli_query($conn, "
     WHERE t.assigned_to = {$_SESSION['user_id']}
     ORDER BY t.deadline ASC
 ");
+/* ===== ADD NOTIFICATION FOR ADMIN ===== */
+mysqli_query($conn,"
+    INSERT INTO notifications (user_id, title, message, type)
+    VALUES (
+        1,
+        'Task Completed',
+        'Agent completed a task',
+        'task'
+    )
+");
+
 ?>
 
 <!DOCTYPE html>

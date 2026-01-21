@@ -1,8 +1,7 @@
 <?php
-session_start();
-if(!isset($_SESSION['user_id']) || $_SESSION['role']!=='Agent'){
-    header("Location: ../auth/login.php"); exit;
-}
+require_once '../includes/middleware.php';
+allowOnly('Agent');
+
 include '../includes/db.php';
 
 $agent_id = $_SESSION['user_id'];

@@ -1,8 +1,7 @@
 <?php
-session_start();
-if(!isset($_SESSION['user_id']) || $_SESSION['role']!=='Agent'){
-    header("Location: ../auth/login.php"); exit;
-}
+require_once '../includes/middleware.php';
+allowOnly('Agent');
+
 
 include '../includes/db.php';
 $agent_id = $_SESSION['user_id'];
@@ -16,6 +15,17 @@ $projects = mysqli_query($conn, "
     WHERE p.agent_id=$agent_id
     ORDER BY p.start_date DESC
 ");
+/* ===== ADD NOTIFICATION FOR ADMIN ===== */
+mysqli_query($conn,"
+    INSERT INTO notifications (user_id, title, message, type)
+    VALUES (
+        1,
+        'Project Completed',
+        'Agent completed a project',
+        'project'
+    )
+");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

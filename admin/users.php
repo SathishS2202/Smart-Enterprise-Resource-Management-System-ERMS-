@@ -1,16 +1,7 @@
 <?php
-include '../includes/auth_check.php';
-checkRole('Admin');  // Only allow Admin
-?>
+require_once '../includes/middleware.php';
+allowOnly('Admin');
 
-
-<?php
-session_start();
-
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-     header("Location: ../auth/login.php");
-    exit;
-}
 
 include '../includes/db.php';
 
@@ -211,7 +202,8 @@ text-decoration:none
     <div class="page-title">Users</div>
     <div>
         <i class="bi bi-person"></i>
-        <?= $_SESSION['user_name'] ?>
+       <?= $_SESSION['username'] ?>
+
     </div>
 </div>
 

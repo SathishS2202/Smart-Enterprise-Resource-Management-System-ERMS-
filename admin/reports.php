@@ -1,14 +1,8 @@
 
 <?php
-include '../includes/auth_check.php';
-checkRole('Admin');  // Only allow Admin
-?>
-<?php
-session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-     header("Location: ../auth/login.php");
-    exit;
-}
+require_once '../includes/middleware.php';
+allowOnly('Admin');
+
 
 include '../includes/db.php';
 
@@ -159,7 +153,7 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6}
     <div class="topbar mb-4">
         <div class="page-title">Reports</div>
         <div>
-            <i class="bi bi-person"></i> <?= $_SESSION['user_name'] ?>
+            <i class="bi bi-person"></i> <?= $_SESSION['username'] ?>
         </div>
     </div>
 

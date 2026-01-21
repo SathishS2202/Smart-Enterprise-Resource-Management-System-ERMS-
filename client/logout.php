@@ -1,13 +1,18 @@
 <?php
 session_start();
 
-// Clear all session variables
+/* Unset all session variables */
 $_SESSION = [];
 
-// Destroy the session
+/* Destroy the session */
 session_destroy();
 
-// Redirect to main login page
-header("Location: ../auth/login.php"); // "../" because logout.php is inside admin/agent/client folders
+/* Prevent browser back button */
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+
+/* Redirect to login */
+header("Location: ../auth/login.php");
 exit;
-?>

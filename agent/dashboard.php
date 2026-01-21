@@ -1,8 +1,10 @@
+
+
+
 <?php
-session_start();
-if(!isset($_SESSION['user_id']) || $_SESSION['role']!=='Agent'){
-    header("Location: ../auth/login.php"); exit;
-}
+require_once '../includes/middleware.php';
+allowOnly('Agent');
+
 
 include '../includes/db.php';
 $agent_id = $_SESSION['user_id'];
@@ -78,8 +80,28 @@ body{margin:0;font-family:Segoe UI;background:#f3f4f6;}
 <div class="main">
 <div class="topbar">
     <div class="page-title">Agent Dashboard</div>
-    <div><i class="bi bi-person"></i> <?= htmlspecialchars($_SESSION['user_name']) ?></div>
+
+    <div class="d-flex align-items-center gap-3">
+        <span>
+            <i class="bi bi-person"></i>
+            <?= htmlspecialchars($_SESSION['user_name']) ?>
+        </span>
+
+        <?php if (
+            isset($_SESSION['role'], $_SESSION['active_role']) &&
+            $_SESSION['role'] === 'Admin' &&
+            $_SESSION['active_role'] === 'Agent'
+        ): ?>
+            <a href="switch_role.php?role=admin" class="btn btn-sm btn-dark">
+                <i class="bi bi-arrow-left-circle"></i> Switch to Admin
+            </a>
+        <?php endif; ?>
+    </div>
 </div>
+
+
+
+
 
 <!-- KEY STATS -->
 <div class="row g-3 mb-3">
